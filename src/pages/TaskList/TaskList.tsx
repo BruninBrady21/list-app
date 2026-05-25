@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 interface TaskListProps {
-  tasks: { id: number; name: string }[];
+  tasks: { id: number; name: string; completed: boolean }[];
   onRemoveTask: (id: number) => void;
+  onToggleTask: (id: number) => void;
 }
 
 const List = styled.ul`
@@ -12,7 +13,7 @@ const List = styled.ul`
   width: 50vw;
 `;
 
-const ListItem = styled.li`
+const ListItem = styled.li<{ completed: boolean }>`
   margin-bottom: 10px;
   border: 1px solid #ccc;
   padding: 10px;
@@ -20,8 +21,17 @@ const ListItem = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-decoration: ${({completed}) => (completed ? "line-through" : "none")};
 `;
 
+const TaskInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 10px; 
+`;
 
 const Button = styled.button`
   padding: 5px 10px;
@@ -35,14 +45,38 @@ const Button = styled.button`
   &:hover {
     background-color: #c82333;
   }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    background-color: #c10e49;
+    box-shadow: none;
+
+  &:focus-visible {
+    outline: 2px solid #c10e49;
+  }
 `;
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onRemoveTask }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onRemoveTask, onToggleTask }) => {
+
+  useEffect(() => {
+    console.log("TaskList component rendered", tasks);
+  }, [tasks]);
+
   return (
     <List>
         {tasks.map((task) => (
-          <ListItem key={task.id}>
-            {task.name}
+          <ListItem key={task.id} completed={task.completed}>
+            <TaskInfo>
+              <Checkbox
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => onToggleTask(task.id)}
+              />
+              <span>{task.name}</span>
+            </TaskInfo>
             <Button onClick={() => onRemoveTask(task.id)}>Remove</Button>
           </ListItem>
         ))}

@@ -32,6 +32,10 @@ const Button = styled.button`
   &:hover {
     background-color: #218838;
   }
+
+  @media (max-width: 600px) {
+    padding: none;
+  }
 `;
 
 const AddTask: React.FC<AddTaskProps> = ({ onAddTask }) => {
