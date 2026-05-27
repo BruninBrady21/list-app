@@ -9,18 +9,23 @@ interface State {
 }
 
 interface Action {
-    type: 'ADD_TASK' | 'REMOVE_TASK' | 'TOGGLE_TASK';
+    type: 'ADD_TASK' | 'REMOVE_TASK' | 'TOGGLE_TASK' | 'SET_TASKS';
     payload: any;
 }
 
 function taskReducer(state: State, action: Action): State {
     switch (action.type) {
+        case 'SET_TASKS':
+            return {
+                ...state,
+                tasks: action.payload,
+            };
         case 'ADD_TASK':
             return {
                 ...state,
                 tasks: [
                     ...state.tasks, 
-                    { id: state.tasks.length + 1, name: action.payload, completed: false }
+                    action.payload
                 ],
             };
         case 'REMOVE_TASK':

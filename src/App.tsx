@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
+import api from './api';
 import TaskList from './pages/TaskList/TaskList';
 import AddTask from './pages/AddTask/AddTask';
 import MainContent from './components/MainContent/MainContent';
@@ -7,12 +8,6 @@ import Footer from './components/Footer/Footer';
 import taskReducer from './reducers/TaskReducer';
 import './App.css';
 
-interface Task {
-  id: number;
-  name: string;
-  completed: boolean;
-}
-
 const initialState = {
   tasks: [],
 };
@@ -20,17 +15,48 @@ const initialState = {
 function App() {
   const [state, dispatch] = useReducer(taskReducer, initialState);
 
+  useEffect(() => {
+    api.get('/tasks')
+      .then((response) => {
+        dispatch({ type: 'SET_TASKS', payload: response.data });
+      })
+      .catch((error) => {
+        console.error('Error fetching tasks:', error);
+      });
+  }, []);
+
   const handleAddTask = (taskName: string) => {
-    dispatch({ type: 'ADD_TASK', payload: taskName });
+    api.post('/tasks', { name: taskName, completed: false })
+      .then((response) => {
+        dispatch({ type: 'ADD_TASK', payload: response.data });
+      })
+      .catch((error) => {
+        console.error('Error adding task:', error);
+      });
   };
 
   const handleRemoveTask = (id: number) => {
-    dispatch({ type: 'REMOVE_TASK', payload: id });
+    api.delete(`/tasks/${id}`)
+      .then(() => {
+        dispatch({ type: 'REMOVE_TASK', payload: id });
+      })
+      .catch((error) => {
+        console.error('Error removing task:', error);
+      });
   };
 
   const handleToggleTask = (id: number) => {
-    dispatch({ type: 'TOGGLE_TASK', payload: id });
-  }
+    const task = state.tasks.find((t) => t.id === id);
+    if (task) {
+      api.put(`/tasks/${id}`, { ...task, completed: !task.completed })
+        .then(() => {
+          dispatch({ type: 'TOGGLE_TASK', payload: id });
+        })
+        .catch((error) => {
+          console.error('Error toggling task:', error);
+        });
+    }
+  };
 
   return (
     <div className="App">

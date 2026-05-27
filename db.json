@@ -1,0 +1,25 @@
+{
+  "tasks": [
+    {
+      "name": "Ninjago s4",
+      "completed": false,
+      "id": "FNJQKbokc7Q"
+    },
+    {
+      "name": "Ninjago s5",
+      "completed": false,
+      "id": "dU_sksMb4F8"
+    },
+    {
+      "name": "Ninjago s7",
+      "completed": false,
+      "id": "LQDRI1ssd4E"
+    },
+    {
+      "name": "Ninjago s8",
+      "completed": false,
+      "id": "bu1Y4bHACkk"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

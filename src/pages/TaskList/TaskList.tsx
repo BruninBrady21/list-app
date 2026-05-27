@@ -53,6 +53,7 @@ const Button = styled.button`
   &:active {
     background-color: #c10e49;
     box-shadow: none;
+  }
 
   &:focus-visible {
     outline: 2px solid #c10e49;
