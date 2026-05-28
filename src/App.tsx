@@ -1,11 +1,15 @@
 import { useReducer, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import api from './api';
-import TaskList from './pages/TaskList/TaskList';
-import AddTask from './pages/AddTask/AddTask';
-import MainContent from './components/MainContent/MainContent';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import taskReducer from './reducers/TaskReducer';
+import MainContent from './components/MainContent/MainContent';
+import AddTask from './pages/AddTask/AddTask';
+import TaskList from './pages/TaskList/TaskList';
+import PendingTasks from './pages/PendingTasks/PendingTasks';
+import CompletedTasks from './pages/CompletedTasks/CompletedTasks';
+import taskReducer from './reducers/taskReducer';
+import type { Task } from './types';
 import './App.css';
 
 const initialState = {
@@ -26,8 +30,8 @@ function App() {
   }, []);
 
   const handleAddTask = (taskName: string) => {
-    api.post('/tasks', { name: taskName, completed: false })
-      .then((response) => {
+    api.post('/tasks', { name: taskName, completed: false, completedAt: null })
+      .then(response => {
         dispatch({ type: 'ADD_TASK', payload: response.data });
       })
       .catch((error) => {
@@ -46,32 +50,43 @@ function App() {
   };
 
   const handleToggleTask = (id: number) => {
-    const task = state.tasks.find((t) => t.id === id);
+    const task = state.tasks.find((task: Task) => task.id === id);
     if (task) {
-      api.put(`/tasks/${id}`, { ...task, completed: !task.completed })
+      const updatedTask: Task = {
+        ...task,
+        completed: !task.completed,
+        completedAt: !task.completed ? new Date() : null
+      };
+      api.put(`/tasks/${id}`, updatedTask)
         .then(() => {
-          dispatch({ type: 'TOGGLE_TASK', payload: id });
+          dispatch({ type: 'TOGGLE_TASK', payload: updatedTask });
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Error toggling task:', error);
         });
     }
   };
 
   return (
-    <div className="App">
-      <Header />
-      <MainContent>
-        <h1>Pending</h1>
-        <AddTask onAddTask={handleAddTask} />
-        <TaskList 
-          tasks={state.tasks} 
-          onRemoveTask={handleRemoveTask}
-          onToggleTask={handleToggleTask}
-        />
-      </MainContent>
-      <Footer />
-    </div>
+    <Router>
+      <div className="app-container">
+        <Header />
+        <MainContent>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <h1>Pendências</h1>
+                <AddTask onAddTask={handleAddTask} />
+                <TaskList tasks={state.tasks} onRemoveTask={handleRemoveTask} onToggleTask={handleToggleTask} />
+              </>
+            } />
+            <Route path="/completed" element={<CompletedTasks tasks={state.tasks} />} />
+            <Route path="/pending" element={<PendingTasks tasks={state.tasks} />} />
+          </Routes>
+        </MainContent>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

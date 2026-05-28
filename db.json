@@ -2,23 +2,33 @@
   "tasks": [
     {
       "name": "Ninjago s4",
-      "completed": false,
-      "id": "FNJQKbokc7Q"
+      "completed": true,
+      "id": "FNJQKbokc7Q",
+      "completedAt": "2026-05-28T21:03:54.156Z"
     },
     {
       "name": "Ninjago s5",
       "completed": false,
-      "id": "dU_sksMb4F8"
+      "id": "dU_sksMb4F8",
+      "completedAt": null
     },
     {
       "name": "Ninjago s7",
       "completed": false,
-      "id": "LQDRI1ssd4E"
+      "id": "LQDRI1ssd4E",
+      "completedAt": null
     },
     {
       "name": "Ninjago s8",
       "completed": false,
-      "id": "bu1Y4bHACkk"
+      "id": "bu1Y4bHACkk",
+      "completedAt": null
+    },
+    {
+      "name": "Ninjago s9",
+      "completed": false,
+      "completedAt": null,
+      "id": "4qJVN6ySCk4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,23 +1,28 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
   display: flex;
   background-color: #ed145b;
-  color: #fff;
+  color: white;
   justify-content: center;
   padding: 20px;
-  text-align: center;
 `;
 
-const HeaderTitle = styled.h1`
-  text-align: center;
+const Nav = styled.nav`
+  display: flex;
+  gap: 15px;
 `;
 
 const Header: React.FC = () => {
   return (
     <HeaderContainer>
-      <HeaderTitle>Task Manager</HeaderTitle>
+      <Nav>
+        <Link to="/">Home</Link>
+        <Link to="/completed">Tarefas Concluídas</Link>
+        <Link to="/pending">Tarefas Pendentes</Link>
+      </Nav>
     </HeaderContainer>
   );
 };

@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
+import type { Task } from '../../types';
 
 interface TaskListProps {
-  tasks: { id: number; name: string; completed: boolean }[];
+  tasks: Task[];
   onRemoveTask: (id: number) => void;
   onToggleTask: (id: number) => void;
 }
@@ -61,11 +62,6 @@ const Button = styled.button`
 `;
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, onRemoveTask, onToggleTask }) => {
-
-  useEffect(() => {
-    console.log("TaskList component rendered", tasks);
-  }, [tasks]);
-
   return (
     <List>
         {tasks.map((task) => (

@@ -1,19 +1,11 @@
-interface Task {
-    id: number;
-    name: string;
-    completed: boolean;
-}
-
-interface State {
-    tasks: Task[];
-}
+import type { Task } from '../types';
 
 interface Action {
-    type: 'ADD_TASK' | 'REMOVE_TASK' | 'TOGGLE_TASK' | 'SET_TASKS';
+    type: string;
     payload: any;
 }
 
-function taskReducer(state: State, action: Action): State {
+const taskReducer = (state: {tasks: Task[]}, action: Action) => {
     switch (action.type) {
         case 'SET_TASKS':
             return {
@@ -37,11 +29,11 @@ function taskReducer(state: State, action: Action): State {
             return {
                 ...state,
                 tasks: state.tasks.map((task) =>
-                    task.id === action.payload ? { ...task, completed: !task.completed } : task
+                    task.id === action.payload.id ? action.payload : task
                 ),
             };
         default:
-            throw new Error('Unknown action type');
+            return state;
     }
 }
 
